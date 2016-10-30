@@ -23,7 +23,7 @@ class DefaultController extends Controller
             $funFact = $cache->fetch($key);
         } else {
             $funFact = $this->get('markdown.parser')
-                ->transform($funFact);
+                            ->transform($funFact);
 
             $cache->save($key, $funFact);
         }
