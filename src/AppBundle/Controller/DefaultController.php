@@ -2,19 +2,61 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Genus;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/{name}")
+     * @Route("/new")
+     */
+    public function newAction()
+    {
+        $genus = new Genus();
+        $genus->setName('Octopus' . rand(1, 100));
+        $genus->setSubFamily('Octopodinae');
+        $genus->setSpeciesCount(rand(100, 99999));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($genus);
+        $em->flush();
+
+        return new Response('Genus created!');
+    }
+
+    /**
+     * @Route("/genus")
+     */
+    public function listAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $genuses = $em->getRepository('AppBundle:Genus')
+                        ->findAllPublishedOrderedBySize();
+
+        return $this->render('default/list.html.twig', [
+            'genuses' => $genuses,
+        ]);
+    }
+
+    /**
+     * @Route("/{name}", name="genus_show")
      */
     public function showAction($name)
     {
-        $funFact = 'Octopuses can change the color of their body in just *three-tenths* of a second!';
+        $em = $this->getDoctrine()->getManager();
+        $genus = $em->getRepository('AppBundle:Genus')
+                    ->findOneBy(['name' => $name]);
+
+        if (!$genus) {
+            throw $this->createNotFoundException();
+        }
+
+        /*$funFact = $genus->getFunFact();
 
         $cache = $this->get('doctrine_cache.providers.my_markdown_cache');
         $key = md5($funFact);
@@ -26,11 +68,10 @@ class DefaultController extends Controller
                             ->transform($funFact);
 
             $cache->save($key, $funFact);
-        }
+        }*/
 
         return $this->render('default/show.html.twig', [
-            'name'  => $name,
-            'funFact' => $funFact,
+            'genus'  => $genus,
         ]);
     }
 
