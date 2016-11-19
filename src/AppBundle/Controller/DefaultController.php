@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Genus;
 use AppBundle\Entity\GenusNote;
+use AppBundle\Service\MarkdownTransformer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -65,6 +66,9 @@ class DefaultController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $transformer = $this->get('app.markdown_transformer');
+        $funFact = $transformer->parse($genus->getFunFact());
+
         /*$funFact = $genus->getFunFact();
 
         $cache = $this->get('doctrine_cache.providers.my_markdown_cache');
@@ -84,6 +88,7 @@ class DefaultController extends Controller
 
         return $this->render('default/show.html.twig', [
             'genus'           => $genus,
+            'funFact'         => $funFact,
             'recentNoteCount' => count($recentNotes),
         ]);
     }

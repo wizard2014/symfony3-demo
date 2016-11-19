@@ -20,14 +20,17 @@ class GenusRepository extends EntityRepository
                     ->execute();
     }
 
+    /**
+     * @return Genus[]
+     */
     public function findAllPublishedOrderedRecentlyActive()
     {
         return $this->createQueryBuilder('genus')
-            ->andWhere('genus.isPublished = :isPublished')
-            ->setParameter('isPublished', true)
-            ->leftJoin('genus.notes', 'genus_note')
-            ->orderBy('genus_note.createdAt', 'DESC')
-            ->getQuery()
-            ->execute();
+                    ->andWhere('genus.isPublished = :isPublished')
+                    ->setParameter('isPublished', true)
+                    ->leftJoin('genus.notes', 'genus_note')
+                    ->orderBy('genus_note.createdAt', 'DESC')
+                    ->getQuery()
+                    ->execute();
     }
 }
