@@ -10,7 +10,6 @@ class MarkdownExtension extends \Twig_Extension
 
     public function __construct(MarkdownTransformer $markdownTransformer)
     {
-
         $this->markdownTransformer = $markdownTransformer;
     }
     

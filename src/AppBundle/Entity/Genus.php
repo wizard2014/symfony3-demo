@@ -24,7 +24,8 @@ class Genus
     private $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubFamily")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $subFamily;
 
@@ -44,22 +45,19 @@ class Genus
     private $isPublished = true;
 
     /**
+     * @ORM\Column(type="date")
+     */
+    private $firstDiscoveredAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="GenusNote", mappedBy="genus")
-     * @ORM\OrderBy({"createdAt"="DESC"})
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $notes;
 
     public function __construct()
     {
         $this->notes = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -79,7 +77,7 @@ class Genus
     }
 
     /**
-     * @return string
+     * @return SubFamily
      */
     public function getSubFamily()
     {
@@ -87,9 +85,9 @@ class Genus
     }
 
     /**
-     * @param string $subFamily
+     * @param SubFamily|null $subFamily
      */
-    public function setSubFamily($subFamily)
+    public function setSubFamily(SubFamily $subFamily = null)
     {
         $this->subFamily = $subFamily;
     }
@@ -126,17 +124,12 @@ class Genus
         $this->funFact = $funFact;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getUpdatedAt()
     {
         return new \DateTime('-' . rand(0, 100) . ' days');
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsPublished()
-    {
-        return $this->isPublished;
     }
 
     /**
@@ -148,10 +141,34 @@ class Genus
     }
 
     /**
+     * @return bool
+     */
+    public function getIsPublished()
+    {
+        return $this->isPublished;
+    }
+
+    /**
      * @return ArrayCollection|GenusNote[]
      */
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getFirstDiscoveredAt()
+    {
+        return $this->firstDiscoveredAt;
+    }
+
+    /**
+     * @param \DateTime|null $firstDiscoveredAt
+     */
+    public function setFirstDiscoveredAt(\DateTime $firstDiscoveredAt = null)
+    {
+        $this->firstDiscoveredAt = $firstDiscoveredAt;
     }
 }

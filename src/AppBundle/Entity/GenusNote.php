@@ -100,7 +100,7 @@ class GenusNote
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -108,7 +108,7 @@ class GenusNote
     }
 
     /**
-     * @param string $createdAt
+     * @param \DateTime $createdAt
      */
     public function setCreatedAt($createdAt)
     {

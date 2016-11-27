@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Genus;
 use AppBundle\Entity\GenusNote;
-use AppBundle\Service\MarkdownTransformer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -68,20 +67,6 @@ class DefaultController extends Controller
 
         $transformer = $this->get('app.markdown_transformer');
         $funFact = $transformer->parse($genus->getFunFact());
-
-        /*$funFact = $genus->getFunFact();
-
-        $cache = $this->get('doctrine_cache.providers.my_markdown_cache');
-        $key = md5($funFact);
-
-        if ($cache->contains($key)) {
-            $funFact = $cache->fetch($key);
-        } else {
-            $funFact = $this->get('markdown.parser')
-                            ->transform($funFact);
-
-            $cache->save($key, $funFact);
-        }*/
 
         $recentNotes = $em->getRepository('AppBundle:GenusNote')
                             ->finaAllRecentNotesForGenus($genus);
