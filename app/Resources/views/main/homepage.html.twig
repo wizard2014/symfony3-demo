@@ -4,6 +4,9 @@
 
 {% block body %}
 
-    <h1 class="page-header test-center">Welcome to our site!</h1>
+    <h1 class="page-header text-center">
+        Welcome
+        {{ app.user ? app.user.email : 'to our site' }}
+    </h1>
 
 {% endblock %}
